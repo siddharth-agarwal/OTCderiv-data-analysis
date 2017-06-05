@@ -1,8 +1,8 @@
-commodity_url <- 'https://kgc0418-tdw-data2-0.s3.amazonaws.com/slices/CUMULATIVE_COMMODITIES_%s.zip'
-credit_url <- 'https://kgc0418-tdw-data2-0.s3.amazonaws.com/slices/CUMULATIVE_CREDITS_%s.zip'
-equities_url <- 'https://kgc0418-tdw-data2-0.s3.amazonaws.com/slices/CUMULATIVE_EQUITIES_%s.zip'
-fx_url <- 'https://kgc0418-tdw-data2-0.s3.amazonaws.com/slices/CUMULATIVE_FOREX_%s.zip'
-rates_url <- 'https://kgc0418-tdw-data2-0.s3.amazonaws.com/slices/CUMULATIVE_RATES_%s.zip'
+commodity_url <- '/slices/CUMULATIVE_COMMODITIES_%s.zip'
+credit_url <- '/slices/CUMULATIVE_CREDITS_%s.zip'
+equities_url <- '/slices/CUMULATIVE_EQUITIES_%s.zip'
+fx_url <- '/slices/CUMULATIVE_FOREX_%s.zip'
+rates_url <- '/slices/CUMULATIVE_RATES_%s.zip'
 
 cur_date <- Sys.Date()
 
