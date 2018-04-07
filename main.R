@@ -4,12 +4,16 @@
 # 3. BBG (TODO)
 # 4. ICE (TODO)
 
+options(stringsAsFactors = FALSE)
+
 source(func.R)
 ## CONFIGURABLE
 cur_date <- Sys.Date()-1
 
 dtcc_gtr_aws_serv <- 'https://kgc0418-tdw-data2-0.s3.amazonaws.com'
 cme_ftp_serv <- 'ftp://ftp.cmegroup.com/sdr'
+bbg_serv <- 'https://www.bloombergsdr.com'
+# ice_serv <- 'https://www.icetradevault.com/tvus-ticker/#'
 
 cme_fx_ext <- '/fx/2017/06/RT.FX.%s.csv.zip'
 
@@ -19,10 +23,15 @@ dtcc_equities_url <- '/slices/CUMULATIVE_EQUITIES_%s.zip'
 dtcc_fx_url <- '/slices/CUMULATIVE_FOREX_%s.zip'
 dtcc_rates_url <- '/slices/CUMULATIVE_RATES_%s.zip'
 
+bbg_rates_ext <- '/file/CR/Cumulative/eod_CR_%s.csv'
+
 ## GET CME FILE
 cme_fx_data <- getSDRData(cme_ftp_serv,cme_fx_ext,as.character.POSIXt(cur_date,'%Y%m%d'))
 ## GET DTCC FILE
-dtcc_tmp_data <- getSDRData(dtcc_gtr_aws_serv,dtcc_rates_url,as.character.POSIXt(cur_date,'%Y_%m_%d'))
+dtcc_tmp_data <- getSDRData(dtcc_gtr_aws_serv,dtcc_credit_url,as.character.POSIXt(cur_date,'%Y_%m_%d'))
+
+## GET BBG FILE
+bbg_tmp_data <- getSDRDataRaw(bbg_serv,bbg_rates_ext,as.character.POSIXt(cur_date,'%Y-%m-%d'))
 
 ## ISDA TAXONOMY
 library(readxl)
@@ -48,9 +57,10 @@ time_slices <- strptime(x, "%Y-%m-%d %H:%M:%S")
 library(ggplot2)
 tst<-datatst2 %>% 
   # filter(EXECUTION_TIMESTAMP< time_slices[1])%>%
-  # levels(TAXONOMY)
-  filter(TAXONOMY=='InterestRate:FRA') %>%
-  filter(UNDERLYING_ASSET_1=='USD-LIBOR-BBA') %>%
-  filter(ACTION=='NEW') %>%
-  ggplot(aes(x= (EXECUTION_TIMESTAMP),y=PRICE_NOTATION)) +
-    geom_point()
+  group_by(TAXONOMY) %>%
+  tally
+  # filter(TAXONOMY=='InterestRate:FRA') %>%
+  # filter(UNDERLYING_ASSET_1=='USD-LIBOR-BBA') %>%
+  # filter(ACTION=='NEW') %>%
+  # ggplot(aes(x= (EXECUTION_TIMESTAMP),y=PRICE_NOTATION)) +
+  #   geom_point()
